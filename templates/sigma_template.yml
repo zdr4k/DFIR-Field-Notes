@@ -1,0 +1,21 @@
+title: <Short descriptive title>
+id: <uuid4>
+status: experimental
+description: <What it detects and why it matters>
+references:
+    - <case link>
+author: Kelvin Santos (@kelvinzdk)
+date: YYYY-MM-DD
+tags:
+    - attack.<tactic>
+    - attack.txxxx
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection:
+        Image|endswith: ''
+    condition: selection
+falsepositives:
+    - <Known benign activity>
+level: medium

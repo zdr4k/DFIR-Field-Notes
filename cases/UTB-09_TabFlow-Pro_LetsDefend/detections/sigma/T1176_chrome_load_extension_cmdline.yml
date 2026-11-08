@@ -1,0 +1,26 @@
+title: Chromium Browser Started With Unpacked Extension Loaded From Command Line
+id: 5c2b8a3e-7f41-4d2a-9e6b-1a0c3d9f4b71
+status: experimental
+description: Detects Chrome or Edge launched with --load-extension, a common way to sideload an unpacked extension outside the managed deployment channel.
+references:
+    - https://attack.mitre.org/techniques/T1176/001/
+author: Kelvin Santos (@kelvinzdk)
+date: 2026-11-08
+tags:
+    - attack.persistence
+    - attack.t1176.001
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_img:
+        Image|endswith:
+            - '\chrome.exe'
+            - '\msedge.exe'
+    selection_cmd:
+        CommandLine|contains: '--load-extension'
+    condition: all of selection_*
+falsepositives:
+    - Developers testing their own extensions
+    - Automation frameworks (Selenium, Puppeteer) that load helper extensions
+level: medium

@@ -1,0 +1,21 @@
+// UTB-09 TabFlow Pro: hunting queries
+// Broad queries used during the investigation before narrowing into rules.
+
+// 1. USB / removable media mounts on the host
+DeviceEvents
+| where DeviceName =~ "WKSTN-ORION-014"
+| where ActionType == "UsbDriveMounted"
+| extend Info = parse_json(AdditionalFields)
+| project Timestamp, DeviceName, Info.DriveLetter, Info.ProductName, Info.SerialNumber
+
+// 2. Processes executed from removable drives
+DeviceProcessEvents
+| where DeviceName =~ "WKSTN-ORION-014"
+| where FolderPath matches regex @"^[D-Z]:\\"
+| project Timestamp, FileName, FolderPath, ProcessCommandLine, AccountName
+
+// 3. Chrome launched with extension related flags
+DeviceProcessEvents
+| where FileName in~ ("chrome.exe", "msedge.exe")
+| where ProcessCommandLine has_any ("--load-extension", "--disable-extensions-except")
+| project Timestamp, DeviceName, AccountName, ProcessCommandLine, InitiatingProcessFileName

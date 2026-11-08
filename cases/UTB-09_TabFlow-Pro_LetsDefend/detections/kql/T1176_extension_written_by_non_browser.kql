@@ -1,0 +1,16 @@
+// Title:        Chrome extension files written by a non browser process
+// ATT&CK:       T1176.001
+// Data source:  DeviceFileEvents (Defender XDR)
+// Maturity:     experimental
+// Source case:  UTB-09 TabFlow Pro
+// Notes:        Chrome writes its own extension folders. Another process doing it
+//               (powershell, cmd, explorer copying from USB) is worth a look.
+
+DeviceFileEvents
+| where Timestamp > ago(7d)
+| where FolderPath has @"\Google\Chrome\User Data\" and FolderPath has @"\Extensions\"
+| where ActionType in ("FileCreated", "FileModified")
+| where InitiatingProcessFileName !in~ ("chrome.exe", "GoogleUpdate.exe", "updater.exe")
+| summarize Files = count(), Sample = make_set(FileName, 10), FirstSeen = min(Timestamp)
+    by DeviceName, InitiatingProcessAccountName, InitiatingProcessFileName, InitiatingProcessCommandLine
+| order by FirstSeen desc

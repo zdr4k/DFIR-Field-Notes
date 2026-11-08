@@ -1,0 +1,9 @@
+// Title:        <name>
+// ATT&CK:       Txxxx
+// Data source:  <DeviceProcessEvents / SecurityEvent / ...>
+// Maturity:     experimental
+// Source case:  <link>
+// Notes:        <tuning hints>
+
+DeviceProcessEvents
+| where Timestamp > ago(7d)

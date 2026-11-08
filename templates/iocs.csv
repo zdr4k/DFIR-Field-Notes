@@ -1,0 +1,2 @@
+type,value,context,first_seen_utc,source
+# types: sha256,md5,domain,url,ip,filepath,registry,extension_id,user,host

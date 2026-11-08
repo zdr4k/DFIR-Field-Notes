@@ -1,0 +1,4 @@
+type,value,context,first_seen_utc,source
+# types: sha256,md5,domain,url,ip,filepath,registry,extension_id,user,host
+host,WKSTN-ORION-014,Compromised workstation,,scenario
+user,jharris,Affected user profile,,scenario
