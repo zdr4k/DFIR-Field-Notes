@@ -1,4 +1,4 @@
-# Under the Bit
+# DFIR Field Notes
 
 Field notes from DFIR labs and investigations. Each case is a full walkthrough turned into reusable defense: an investigation report, IOCs, hunting queries and detection rules mapped to MITRE ATT&CK.
 
@@ -18,7 +18,7 @@ Companion repo for the **Under the Bit** series on [The Big Rollback](https://me
 
 | # | Case | Platform | Category | Key techniques | Detections |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| 09 | [TabFlow Pro](./cases/UTB-09_TabFlow-Pro_LetsDefend/) | LetsDefend | Endpoint / Browser | T1176, T1200 | 🚧 |
+| 09 | [TabFlow Pro](./cases/UTB-09_TabFlow-Pro_LetsDefend/) | LetsDefend | Endpoint / Browser extension | T1200, T1176.001, T1539, T1547.001 | 3 YARA, 1 Sigma, 1 KQL |
 
 ## Workflow
 
@@ -31,7 +31,7 @@ Companion repo for the **Under the Bit** series on [The Big Rollback](https://me
 ## Ground rules
 
 * No live malware or raw evidence in this repo. Hashes, defanged IOCs and code excerpts only.
-* Lab answers and flags stay out of the reports. The walkthrough explains the method, the platform keeps its challenge.
+* Reports follow the published walkthrough: method first, with the evidence that supports each answer.
 * Detections are marked by maturity: `experimental`, `test`, `stable`.
 
 ## License
