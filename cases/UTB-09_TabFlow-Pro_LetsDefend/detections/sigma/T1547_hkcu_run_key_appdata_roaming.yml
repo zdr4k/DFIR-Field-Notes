@@ -1,0 +1,29 @@
+title: HKCU Run Key Value Pointing to Executable in AppData Roaming
+id: 13458534-f3af-41e9-9e09-373182aed830
+status: experimental
+description: |
+    Detects a new value under the user's Run key that launches an executable from AppData\Roaming.
+    Malware dropped without admin rights often lands in the user's profile and persists this way.
+    Observed in UTB-09 TabFlow Pro, where a native companion of a malicious Chrome extension was
+    persisted as HKCU\...\Run\TabFlowServiceHost.
+references:
+    - https://github.com/zdr4k/DFIR-Field-Notes/tree/main/cases/UTB-09_TabFlow-Pro_LetsDefend
+    - https://attack.mitre.org/techniques/T1547/001/
+author: Kelvin Santos (@kelvinzdk)
+date: 2026-11-11
+tags:
+    - attack.persistence
+    - attack.t1547.001
+logsource:
+    category: registry_set
+    product: windows
+detection:
+    selection:
+        TargetObject|contains: '\Software\Microsoft\Windows\CurrentVersion\Run'
+        Details|contains|all:
+            - '\AppData\Roaming\'
+            - '.exe'
+    condition: selection
+falsepositives:
+    - Legitimate per user applications installed in AppData\Roaming (for example Spotify or Zoom). Baseline them and add filters by full path
+level: medium

@@ -1,4 +1,22 @@
 type,value,context,first_seen_utc,source
-# types: sha256,md5,domain,url,ip,filepath,registry,extension_id,user,host
-host,WKSTN-ORION-014,Compromised workstation,,scenario
-user,jharris,Affected user profile,,scenario
+host,WKSTN-ORION-014,Compromised workstation,,Scenario
+user,jharris,Affected user profile,,Scenario
+usb_vid_pid,VID_23A9&PID_EF18,USB drive used during physical access,2026-04-16T23:21:03Z,SYSTEM\ControlSet001\Enum\USB; setupapi.dev.log
+usb_device,Disk&Ven_AI&Prod_Mass_Storage,USBSTOR device string (AI Mass Storage USB Device),2026-04-16T23:21:03Z,SYSTEM\ControlSet001\Enum\USBSTOR
+disk_guid,{0a66ee8e-39e8-11f1-9445-000c29878231},USB drive Disk Id,2026-04-16T23:21:03Z,SYSTEM\ControlSet001\Enum\USBSTOR
+volume_guid,{0a66ee91-39e8-11f1-9445-000c29878231},USB partition mounted as E:,2026-04-16T23:21:04Z,SYSTEM\MountedDevices; NTUSER.DAT MountPoints2
+volume_guid,{0a66ee92-39e8-11f1-9445-000c29878231},USB partition mounted as F:,2026-04-16T23:21:04Z,SYSTEM\MountedDevices; NTUSER.DAT MountPoints2
+filepath,E:\TabFlowPro,Folder opened from the USB drive,,TabFlowPro.lnk target
+filepath,C:\Users\jharris\AppData\Roaming\Microsoft\Windows\Recent\TabFlowPro.lnk,Shortcut created when E:\TabFlowPro was opened,,File system
+extension_id,djflhoibgkdhkhhcedjiklpkjnoahfmg,TabFlow Pro 2.1.0 Chrome extension,,Chrome Preferences; Extensions folder
+filepath,C:\Users\jharris\AppData\Local\Google\Chrome\User Data\Default\Extensions\djflhoibgkdhkhhcedjiklpkjnoahfmg\2.1.0_0\,Extension install folder,,File system
+extension_name,TabFlow Pro,Extension display name (author: TabFlow Software LLC),,manifest.json
+filepath,C:\Users\jharris\AppData\Roaming\TabFlowNative\mshost_service.exe,Native companion binary launched at logon,,Run key; scheduled task
+registry,HKCU\Software\Microsoft\Windows\CurrentVersion\Run\TabFlowServiceHost,Run key persistence,2026-04-16T23:31:34Z,NTUSER.DAT (key last write)
+scheduled_task,\TabFlowServiceHost,Scheduled task persistence,,C:\Windows\System32\Tasks\TabFlowServiceHost
+command_line,"""C:\Users\jharris\AppData\Roaming\TabFlowNative\mshost_service.exe"" --background --no-window",Command launched by Run key and scheduled task,,Run key; task XML
+domain,api.tabflow-cdn.net,C2 host,,background.js (_cfg.h)
+url,https://api.tabflow-cdn.net/api/v2/register,Victim registration endpoint,,background.js (_cfg.r)
+url,https://api.tabflow-cdn.net/api/v2/sync,Exfiltration endpoint,,background.js (_cfg.s)
+http_header,X-Client-Key: tf-2025-x-march-key,Static client key sent on every C2 request,,background.js (_cfg.k)
+http_header,X-Build: dGFiZmxvdy1wcm8tZXh0,Base64 of tabflow-pro-ext sent on beacon requests,,background.js (_cfg.id)
