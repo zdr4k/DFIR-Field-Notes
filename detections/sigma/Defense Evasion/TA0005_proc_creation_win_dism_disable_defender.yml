@@ -1,0 +1,29 @@
+title: Windows Defender Disabled via DISM
+id: dc3ec4f9-d0ee-48a6-af3a-9004b3437ea7
+status: experimental
+description: >
+  Detects attempts to disable or remove the Windows Defender feature using
+  DISM, as observed in PYSA/Mespinoza ransomware intrusions.
+references:
+    - https://attack.mitre.org/techniques/T1685/
+    - https://thedfirreport.com/2020/11/23/pysa-mespinoza-ransomware/
+author: Kelvin Santos (@kelvinzdk)
+date: 2026-11-24
+tags:
+    - attack.defense-evasion
+    - attack.t1685
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_process:
+        - Image|endswith: '\Dism.exe'
+        - OriginalFileName: 'DISM.EXE'
+    selection_command:
+        CommandLine|contains|all:
+            - '/Disable-Feature'
+            - 'Windows-Defender'
+    condition: all of selection_*
+falsepositives:
+    - Planned replacement of Defender by another EDR on servers
+level: high
