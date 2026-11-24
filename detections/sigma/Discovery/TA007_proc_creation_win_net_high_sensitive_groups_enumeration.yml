@@ -1,0 +1,5 @@
+title: Active Directory Privileged Group or Domain Controller Discovery
+id: 1b8f3e6a-7c2d-4f9b-a4e1-5d0c8b3f7a92
+status: experimental
+description: >
+  Detects enumeration of privl
