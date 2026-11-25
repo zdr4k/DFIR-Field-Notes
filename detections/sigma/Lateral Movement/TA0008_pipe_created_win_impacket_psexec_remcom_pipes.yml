@@ -1,0 +1,33 @@
+title: Impacket PsExec RemCom Named Pipe
+id: 509d810c-e44f-4713-8993-f7a9461c5703
+status: experimental
+description: >
+  Detects creation of or connection to the named pipes used by the RemComSvc
+  service embedded in Impacket psexec.py. The pipe names, including the
+  "communicaton" typo, are hardcoded in the tool.
+references:
+  - https://github.com/fortra/impacket/blob/master/examples/psexec.py
+  - https://github.com/kavika13/RemCom
+  - https://attack.mitre.org/techniques/T1021/002/
+  - https://attack.mitre.org/techniques/T1569/002/
+author: Kelvin Santos (@kelvinzdk)
+date: 2026-11-25
+tags:
+  - attack.lateral-movement
+  - attack.execution
+  - attack.t1021.002
+  - attack.t1569.002
+logsource:
+  product: windows
+  category: pipe_created
+detection:
+  selection:
+    PipeName|startswith:
+      - '\RemCom_communicaton'
+      - '\RemCom_stdin'
+      - '\RemCom_stdout'
+      - '\RemCom_stderr'
+  condition: selection
+falsepositives:
+  - Legitimate administrative use of the original RemCom tool
+level: high
