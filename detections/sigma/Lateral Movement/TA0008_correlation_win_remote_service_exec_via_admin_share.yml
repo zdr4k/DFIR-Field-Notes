@@ -1,0 +1,84 @@
+title: Executable Written to ADMIN Share
+id: 4e7b2c91-6a3d-4f8e-b1c5-9d0a7e2f3b46
+name: smb_admin_share_access
+status: experimental
+description: >
+  Detects an executable being written to the ADMIN$ share. Base rule for the
+  Impacket PsExec correlation, not meant to alert on its own.
+references:
+  - https://learn.microsoft.com/en-us/windows/security/threat-protection/auditing/event-5145
+author: Kelvin Santos (@kelvinzdk)
+date: 2026-11-25
+tags:
+  - attack.lateral-movement
+  - attack.t1021.002
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 5145
+    ShareName|endswith: '\ADMIN$'
+    RelativeTargetName|endswith: '.exe'
+    AccessList|contains: '%%4417'
+  condition: selection
+falsepositives:
+  - Software deployment tools copying binaries to ADMIN$
+level: informational
+---
+title: Impacket PsExec Service Installation
+id: 7c3a9e15-2b8f-4d6a-9e1c-5f0b8a3d7e62
+name: random_service_binary_install
+status: experimental
+description: >
+  Detects a service installed with an 8 letter random binary name in the
+  Windows directory, the pattern used by Impacket psexec.py.
+references:
+  - https://github.com/fortra/impacket/blob/master/examples/psexec.py
+author: Kelvin Santos (@kelvinzdk)
+date: 2026-11-25
+tags:
+  - attack.execution
+  - attack.t1569.002
+logsource:
+  product: windows
+  service: system
+detection:
+  selection:
+    EventID: 7045
+    Provider_Name: 'Service Control Manager'
+    ImagePath|re: '(?i)^%systemroot%\\[a-z]{8}\.exe$'
+  condition: selection
+falsepositives:
+  - Unlikely
+level: informational
+---
+title: Impacket PsExec Service Execution via ADMIN Share
+id: 8f2c6a1d-4b7e-4e3a-9d5f-1c0b7a3e6f24
+status: experimental
+description: >
+  Detects an executable written to ADMIN$ followed by the installation of a
+  service with a random binary name on the same host within one minute,
+  matching the Impacket psexec.py execution flow.
+references:
+  - https://github.com/fortra/impacket/blob/master/examples/psexec.py
+  - https://attack.mitre.org/techniques/T1021/002/
+  - https://attack.mitre.org/techniques/T1569/002/
+author: Kelvin Santos (@kelvinzdk)
+date: 2026-11-25
+tags:
+  - attack.lateral-movement
+  - attack.execution
+  - attack.t1021.002
+  - attack.t1569.002
+correlation:
+  type: temporal_ordered
+  rules:
+    - smb_admin_share_access
+    - random_service_binary_install
+  group-by:
+    - Computer
+  timespan: 1m
+falsepositives:
+  - Software deployment that copies a binary and installs a service with a random 8 letter name
+level: high
