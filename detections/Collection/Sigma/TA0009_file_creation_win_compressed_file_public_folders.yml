@@ -1,0 +1,58 @@
+title: Archive File Created in Users Public Folder
+id: 3d8e5b2a-9f41-4c7e-a6d3-1b0f8e7c2a95
+status: experimental
+description: >
+  Detects archive files created in the Users Public folder, a world writable
+  location used to stage collected data before exfiltration.
+references:
+    - https://attack.mitre.org/techniques/T1074/001/
+    - https://thedfirreport.com/2023/02/06/collect-exfiltrate-sleep-repeat/
+author: Kelvin Santos (@kelvinzdk)
+date: 2026-11-25
+tags:
+    - attack.collection
+    - attack.t1074.001
+    - attack.t1560.001
+logsource:
+    category: file_event
+    product: windows
+detection:
+    selection:
+        TargetFilename|contains: '\Users\Public\'
+        TargetFilename|endswith:
+            - '.zip'
+            - '.rar'
+            - '.7z'
+            - '.tar'
+            - '.gz'
+            - '.cab'
+    condition: selection
+falsepositives:
+    - Users or scripts intentionally sharing archives through the Public folder
+level: medium
+---
+title: Archive File Created in Root of Temp Folder
+id: 6a1c9f73-2e8d-4b5a-b7c4-0d3e9a8f1b26
+status: experimental
+description: >
+  Detects archive files created directly in the root of a Temp folder rather
+  than in an application subfolder, a pattern used for local data staging.
+references:
+    - https://attack.mitre.org/techniques/T1074/001/
+    - https://www.atomicredteam.io/atomic-red-team/atomics/T1074.001#atomic-test-3---zip-a-folder-with-powershell-for-staging-in-temp
+author: Kelvin Santos (@kelvinzdk)
+date: 2026-11-25
+tags:
+    - attack.collection
+    - attack.t1074.001
+    - attack.t1560.001
+logsource:
+    category: file_event
+    product: windows
+detection:
+    selection:
+        TargetFilename|re: '(?i)\\(AppData\\Local|Windows)\\Temp\\[^\\]+\.(zip|rar|7z|tar|gz|cab)$'
+    condition: selection
+falsepositives:
+    - Installers or updaters that drop archives directly in Temp
+level: low

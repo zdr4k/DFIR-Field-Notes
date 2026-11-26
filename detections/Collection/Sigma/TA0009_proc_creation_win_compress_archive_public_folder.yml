@@ -1,0 +1,30 @@
+title: Compression or Archiving to Public Folder using compress-archive.
+id: dc7019ff-d059-4762-8694-86103ef04ccb
+status: experimental
+description: >
+  Detects the creation of compressed or archived files in public folders, 
+  which may indicate data exfiltration or unauthorized data sharing.
+references:
+    - https://attack.mitre.org/techniques/T1560/001/
+    - https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.archive/?view=powershell-7.6
+author: Kelvin Santos (@kelvinzdk)
+date: 2026-11-25
+tags:
+    - attack.collection
+    - attack.t1560.001
+    - attack.t1074.001
+logsource:
+    category: ps_script
+    product: windows
+detection:
+    selection_command:
+        ScriptBlockText|contains:
+        - 'compress-archive'
+    selection_path:
+        ScriptBlockText|contains:
+        - '\Users\Public'
+        - '$env:PUBLIC'
+    condition: selection_command and selection_path
+falsepositives:
+    - Legitimate administrative activities
+level: medium
